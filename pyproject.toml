@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "telegram-ai-bot"
+version = "1.0.0"
+description = "Desktop assistant that answers Telegram chats with Google Gemini, using chat history and a local knowledge base."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "PySide6>=6.8",
+    "requests[socks]>=2.32",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "pyinstaller>=6.10",
+    "ruff>=0.6",
+]
+
+[project.gui-scripts]
+telegram-ai-bot = "telegram_ai_bot.ui.app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+telegram_ai_bot = ["resources/*", "resources/fonts/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["gui: needs a display and Qt WebEngine (enable with RUN_GUI_TESTS=1)"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# User-facing sentences and the stylesheet read better unwrapped.
+"src/telegram_ai_bot/ui/strings.py" = ["E501"]
+"src/telegram_ai_bot/ui/theme.py" = ["E501"]

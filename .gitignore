@@ -1,0 +1,42 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+
+# --- Tooling caches ---
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# --- Build output (PyInstaller / DMG) ---
+build/
+dist/
+*.spec
+*.dmg
+
+# --- Local app data: never commit (the database holds the API key, the profile holds the Telegram session) ---
+*.db
+*.db-journal
+*.sqlite3
+webview_profile/
+chrome_profile/
+logs/
+*.log
+
+# --- Secrets ---
+.env
+.env.*
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+*.swp
+.DS_Store
