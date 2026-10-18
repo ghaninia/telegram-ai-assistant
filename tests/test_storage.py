@@ -11,8 +11,8 @@ def test_knowledge_crud_and_search(db):
     hours = repo.add("Hours", "9 to 6")
     address = repo.add("Address", "Tehran", enabled=False)
 
-    assert [i.title for i in repo.list()] == ["Address", "Hours"]  # newest first
-    assert [i.title for i in repo.list("Tehran")] == ["Address"]
+    assert [i.title for i in repo.search()] == ["Address", "Hours"]  # newest first
+    assert [i.title for i in repo.search("Tehran")] == ["Address"]
     assert [i.title for i in repo.enabled()] == ["Hours"]
     assert repo.count_enabled() == 1
 
@@ -62,7 +62,7 @@ def test_upgrades_database_from_previous_release(tmp_path):
     conn.close()
 
     db = Database(path)
-    assert KnowledgeRepository(db).list()[0].title == "t"
+    assert KnowledgeRepository(db).search()[0].title == "t"
     assert SettingsRepository(db).load().api_key == "legacy-key"
     with db.connect() as conn:
         assert conn.execute("PRAGMA user_version").fetchone()[0] == len(MIGRATIONS)

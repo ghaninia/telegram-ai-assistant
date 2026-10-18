@@ -21,7 +21,7 @@ class KnowledgeRepository:
     def __init__(self, db: Database):
         self._db = db
 
-    def list(self, query: str = "") -> list[KnowledgeItem]:
+    def search(self, query: str = "") -> list[KnowledgeItem]:
         sql, params = "SELECT * FROM knowledge", ()
         if query:
             sql += " WHERE title LIKE ? OR content LIKE ?"

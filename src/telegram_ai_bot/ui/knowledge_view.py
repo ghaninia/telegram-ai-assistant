@@ -136,7 +136,7 @@ class KnowledgeView(QWidget):
     def reload(self) -> None:
         self._list.clear()
         query = self._search.text().strip()
-        items = self._repo.list(query)
+        items = self._repo.search(query)
         if not items:
             if query:
                 empty = EmptyState("🔍", strings.KNOWLEDGE_NO_RESULTS_TITLE, strings.KNOWLEDGE_NO_RESULTS_BODY)
