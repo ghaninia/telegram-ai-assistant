@@ -13,26 +13,21 @@ A macOS desktop app that embeds Telegram Web and answers the open chat automatic
 
 ## Development
 
-Requires Python 3.11+.
+Requires Python 3.11+ and `make`. Run `make` to list all targets.
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-
-python -m telegram_ai_bot          # run the app
-pytest                             # unit tests (headless)
-RUN_GUI_TESTS=1 pytest -m gui      # integration tests with real Qt WebEngine (needs a display)
-ruff check src tests               # lint
+make install     # create .venv and install the app with dev tools
+make run         # run the app from source
+make check       # lint + unit tests (run before committing)
+make test-gui    # Qt WebEngine integration tests (needs a display)
+make build       # checks, then dist/TelegramAIBot.app and .dmg
+make logs        # last lines of the app log
+make clean       # remove build output and caches (distclean also removes .venv)
 ```
 
-## Build (macOS)
+Without make: `pip install -e ".[dev]"`, then `python -m telegram_ai_bot`, `pytest`, `ruff check src tests`, `./scripts/build_macos.sh`.
 
-```bash
-./scripts/build_macos.sh
-```
-
-Produces `dist/TelegramAIBot.app` and `dist/TelegramAIBot.dmg` (Apple Silicon). The app is ad-hoc signed; on another Mac open it with right-click → Open, or run `xattr -cr /Applications/TelegramAIBot.app`.
+The `.app` is ad-hoc signed (Apple Silicon). On another Mac, open it with right-click → Open, or run `xattr -cr /Applications/TelegramAIBot.app`.
 
 ## Data
 
@@ -60,6 +55,7 @@ src/telegram_ai_bot/
 tests/                 unit tests; the bot runs against an in-memory fake Telegram page
 packaging/             PyInstaller launcher and app icon
 scripts/build_macos.sh
+Makefile               development tasks
 ```
 
 ### Design notes
