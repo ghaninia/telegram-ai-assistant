@@ -29,6 +29,18 @@ Without make: `pip install -e ".[dev]"`, then `python -m telegram_ai_bot`, `pyte
 
 The `.app` is ad-hoc signed (Apple Silicon). On another Mac, open it with right-click → Open, or run `xattr -cr /Applications/TelegramAIBot.app`.
 
+## Releases
+
+Releases are built and published by GitHub Actions:
+
+```bash
+make release VERSION=1.2.0
+```
+
+This runs the checks, bumps `__version__` in `src/telegram_ai_bot/__init__.py` (the single version source), commits, tags `v1.2.0` and pushes. The tag starts the **Release** workflow, which builds the app on an Apple Silicon macOS runner and publishes a GitHub Release with `TelegramAIBot-1.2.0-macos-arm64.dmg` and notes generated from the commits. The workflow refuses tags that don't match `__version__`.
+
+The **CI** workflow runs lint and tests on every push to `master` and on every pull request. The Release workflow can also be started manually from the Actions tab; a manual run only uploads the DMG as a build artifact and publishes no release.
+
 ## Data
 
 All user data lives in `~/Library/Application Support/TelegramAIBot/` (override with `TELEGRAM_AI_BOT_DATA_DIR`):
@@ -55,7 +67,8 @@ src/telegram_ai_bot/
 tests/                 unit tests; the bot runs against an in-memory fake Telegram page
 packaging/             PyInstaller launcher and app icon
 scripts/build_macos.sh
-Makefile               development tasks
+Makefile               development and release tasks
+.github/workflows/     CI (lint + tests) and tag-triggered macOS release
 ```
 
 ### Design notes
