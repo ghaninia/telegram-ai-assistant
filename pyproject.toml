@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "telegram-ai-bot"
-version = "1.0.0"
+dynamic = ["version"]
 description = "Desktop assistant that answers Telegram chats with Google Gemini, using chat history and a local knowledge base."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -22,6 +22,10 @@ dev = [
 
 [project.gui-scripts]
 telegram-ai-bot = "telegram_ai_bot.ui.app:main"
+
+[tool.setuptools.dynamic]
+# Single source of truth for the version (bumped by `make release`).
+version = { attr = "telegram_ai_bot.__version__" }
 
 [tool.setuptools.packages.find]
 where = ["src"]

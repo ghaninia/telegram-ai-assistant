@@ -20,6 +20,14 @@ pyinstaller --noconfirm --clean --windowed \
   --distpath "$ROOT/dist" --workpath "$WORK" --specpath "$WORK" \
   "$ROOT/packaging/launcher.py"
 
+# Stamp the app version into Info.plist (shown in Finder / About), then re-sign:
+# editing a signed bundle invalidates its signature.
+VERSION="$(python -c 'import telegram_ai_bot; print(telegram_ai_bot.__version__)')"
+PLIST="dist/$APP_NAME.app/Contents/Info.plist"
+plutil -replace CFBundleShortVersionString -string "$VERSION" "$PLIST"
+plutil -replace CFBundleVersion -string "$VERSION" "$PLIST"
+codesign --force --deep --sign - "dist/$APP_NAME.app"
+
 # Drag-and-drop installer with an Applications shortcut.
 rm -rf "$WORK/dmg" "dist/$APP_NAME.dmg"
 mkdir -p "$WORK/dmg"
@@ -29,4 +37,4 @@ hdiutil create -volname "$APP_NAME" -srcfolder "$WORK/dmg" -ov -format UDZO "dis
 
 # Remove intermediates; keep only the .app and .dmg.
 rm -rf "$WORK" "dist/$APP_NAME"
-echo "Built dist/$APP_NAME.app and dist/$APP_NAME.dmg"
+echo "Built dist/$APP_NAME.app and dist/$APP_NAME.dmg (version $VERSION)"
